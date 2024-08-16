@@ -8,6 +8,11 @@ class TaskManagerApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// This test will pass if the application context loads successfully.
 	}
 
+	@Test
+	void main() {
+		TaskManagerApplication.main(new String[]{});
+	}
 }
