@@ -6,9 +6,9 @@ import static org.mockito.Mockito.*;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.entity.User;
 import com.example.taskmanager.exception.TaskNotFoundException;
+import com.example.taskmanager.exception.UserNotFoundException;
 import com.example.taskmanager.repository.TaskRepository;
 import com.example.taskmanager.repository.UserRepository;
-import com.example.taskmanager.serviceimpl.TaskServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -79,7 +79,7 @@ public class TaskServiceImplTest {
 
         when(userRepository.findById(2L)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(UserNotFoundException.class, () -> {
             taskService.createTask(task, TimeZone.getTimeZone("UTC"));
         });
 
@@ -157,7 +157,7 @@ public class TaskServiceImplTest {
         when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
         when(userRepository.findById(2L)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(UserNotFoundException.class, () -> {
             taskService.getTaskById(1L);
         });
 
@@ -243,7 +243,7 @@ public class TaskServiceImplTest {
         when(taskRepository.findById(1L)).thenReturn(Optional.of(existingTask));
         when(userRepository.findById(2L)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(UserNotFoundException.class, () -> {
             taskService.updateTask(1L, updatedTaskDetails, TimeZone.getTimeZone("UTC"));
         });
 
@@ -257,6 +257,8 @@ public class TaskServiceImplTest {
     public void testDeleteTask() {
         Task task = new Task();
         task.setId(1L);
+        task.setTitle("Complete project documentation");
+
         when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
 
         taskService.deleteTask(1L);
